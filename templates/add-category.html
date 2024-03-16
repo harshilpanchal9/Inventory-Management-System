@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-sidebar">
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>Add Product | Administrator</title>
+	<!--favicon-->
+	<link rel="icon" href="assets/images/favicon-32x32.png" type="image/png" />
+	<!--plugins-->
+	<link href="static/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="static/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="static/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+	<!-- loader-->
+	<link href="static/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="static/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="static/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&amp;family=Roboto&amp;display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="static/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="static/assets/css/app.css" />
+	<link rel="stylesheet" href="static/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="static/assets/css/dark-theme.css" />
+	<style>
+		.required:after {
+            content: " *";
+            color: red;
+        }
+	</style>
+</head>
+
+<body>
+	<!-- wrapper -->
+	<div class="wrapper">
+		{% include 'sidebar.html' %}		
+		<!--page-wrapper-->
+		<div class="page-wrapper">                    
+            <div class="page-content-wrapper">
+                {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <strong>{{ message }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+                <div class="page-content">
+                    <div class="row">
+                        <div class="col-xl-9 mx-auto">
+                            <h6 class="mb-0 text-uppercase">Add Category</h6>
+                            <hr>
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="p-4 border rounded">
+                                        <form class="row g-3 needs-validation" method="post" action="/add-category">
+                                            {% csrf_token %}
+                                            <div class="col-12">
+                                                <label for="categoryname" class="form-label required">Category name</label>
+                                                <input type="text" class="form-control" id="category" name="categoryname" pattern="^[a-zA-Z\s-]+$" autocomplete="off" required>
+                                            </div>                                            
+                                            <div class="col-12">
+                                                <button class="btn btn-primary" onclick="SubmitButton()" type="submit">Add Category</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>					
+
+	<!-- Bootstrap JS -->
+	<script src="static/assets/js/bootstrap.bundle.min.js"></script>
+	<!--plugins-->
+	<script src="static/assets/js/jquery.min.js"></script>
+	<script src="static/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="static/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="static/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+	<!-- Vector map JavaScript -->
+	<script src="static/assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js"></script>
+	<script src="static/assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js"></script>
+	<script src="static/assets/plugins/vectormap/jquery-jvectormap-in-mill.js"></script>
+	<script src="static/assets/plugins/vectormap/jquery-jvectormap-us-aea-en.js"></script>
+	<script src="static/assets/plugins/vectormap/jquery-jvectormap-uk-mill-en.js"></script>
+	<script src="static/assets/plugins/vectormap/jquery-jvectormap-au-mill.js"></script>
+	<!-- App JS -->
+	<script src="static/assets/js/app.js"></script>
+	<script>
+		// Set custom validation message
+		function SubmitButton(){
+			const myInput = document.getElementById("category");
+			var pattern = /^[a-zA-Z\s]+$/;
+			if(myInput.value == ""){
+				myInput.setCustomValidity("Category name cannot be empty.");
+			} else if(!pattern.test(myInput.value)){
+				myInput.setCustomValidity("Invalid Format, please do not use Special Characters and Numbers.");
+			} else {
+				myInput.setCustomValidity("");
+			}
+		}
+
+	</script>
+</body>
+</html>

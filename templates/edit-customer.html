@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-sidebar">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Edit Customer | Administrator</title>
+    <!--favicon-->
+    <link rel="icon" href="assets/images/favicon-32x32.png" type="image/png" />
+    <!--plugins-->
+    <link href="static/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+    <link href="static/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="static/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" />
+    <!-- loader-->
+    <link href="static/assets/css/pace.min.css" rel="stylesheet" />
+    <script src="static/assets/js/pace.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="static/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/flatly/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&amp;family=Roboto&amp;display=swap" />
+    <!-- Icons CSS -->
+    <link rel="stylesheet" href="static/assets/css/icons.css" />
+    <!-- App CSS -->
+    <link rel="stylesheet" href="static/assets/css/app.css" />
+    <link rel="stylesheet" href="static/assets/css/dark-sidebar.css" />
+    <link rel="stylesheet" href="static/assets/css/dark-theme.css" />
+
+    <style>
+        .no-arrows::-webkit-inner-spin-button,
+        .no-arrows::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* This will hide the scrollbar in Google Chrome and Safari */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+        .required:after {
+            content: " *";
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- wrapper -->
+    {% include 'sidebar.html' %}
+    <!--page-wrapper-->
+    <div class="page-wrapper">
+        <div class="page-content-wrapper">
+            {% if messages %} {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                <strong>{{ message }}</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %} {% endif %}
+
+            <div class="page-content">
+                <div class="row">
+                    <div class="col-xl-8 mx-auto">
+                        <div class="card border-top border-0 border-4 border-primary">
+                            <div class="card-body p-5">
+                                <div class="card-title d-flex align-items-center">
+                                    <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
+                                    </div>
+                                    <h5 class="mb-0 text-primary">Edit customer</h5>
+                                </div>
+                                <hr>
+                                <form class="row g-3" method="POST" action="/edit-customer">
+                                    {% csrf_token %}
+                                    <div class="col-md-2">
+                                        <label for="inputCustomerID" class="form-label">Customer ID</label>
+                                        <input type="number" class="form-control" name="customerId" value="{{customerId}}" id="inputCustomerID" readonly>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label for="inputCustomerGst" class="form-label">GSTIN</label>
+                                            <input type="text" class="form-control" id="inputCustomerGst" value="{{customerGst}}" autocomplete="off" name="customerGst">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="inputCustomerName" class="form-label required">Customer Name</label>
+                                            <input type="text" class="form-control" id="inputCustomerName"value="{{customerName}}" autocomplete="off" name="customerName" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="inputEmail" class="form-label">Email</label>
+                                            <input type="email" name="customerEmail" id="inputEmail" value="{{customerEmail}}" autocomplete="off" class="form-control">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="inputPhone" class="form-label required">Phone</label>
+                                            <input type="tel" name="customerPhone" id="inputPhone" value="{{customerPhone}}" autocomplete="off" class="form-control" required>
+                                        </div>
+                                        <div class="col-12">
+                                            <label for="inputAddress" class="form-label required">Address</label>
+                                            <textarea class="form-control" id="inputAddress" name="customerAddress" autocomplete="off" placeholder="Enter a address" rows="3"
+                                                required>{{customerAddress}}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" onclick="SubmitBtn()" class="btn btn-primary px-5">Edit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="javaScript:;" class="back-to-top"><i class="bx bxs-up-arrow-alt"></i></a>
+        </div>
+    </div>
+    <!-- Bootstrap JS -->
+    <script src="static/assets/js/bootstrap.bundle.min.js"></script>
+
+    <!--plugins-->
+    <script src="static/assets/js/jquery.min.js"></script>
+    <script src="static/assets/plugins/simplebar/js/simplebar.min.js"></script>
+    <script src="static/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+    <script src="static/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+    <script src="static/assets/plugins/edittable/bstable.js"></script>
+    <!-- App JS -->
+    <script src="static/assets/js/app.js"></script>
+    <script>
+        // Input validations
+        function SubmitBtn() {
+            const inputCustomerGst = document.getElementById("inputCustomerGst");
+            const inputCustomerName = document.getElementById("inputCustomerName");
+            const inputPhone = document.getElementById("inputPhone");
+            const inputAddress = document.getElementById("inputAddress");
+            var alpha = /^[a-zA-Z\s]+$/;
+            var alphanumeric = /^[a-zA-Z0-9]+$/;
+            var phoneNumberPattern = /^\d{10}$/;
+        
+            var isValid = true;
+        
+            if (inputCustomerGst.value != "") {
+                if (!alphanumeric.test(inputCustomerGst.value)) {
+                    inputCustomerGst.setCustomValidity("Invalid format. Please do not use special characters.");
+                    isValid = false;
+                } else {
+                    inputCustomerGst.setCustomValidity("");
+                }
+            }
+            
+            if (inputCustomerName.value == "") {
+                inputCustomerName.setCustomValidity("Customer name cannot be empty.");
+                isValid = false;
+            } else if (!alpha.test(inputCustomerName.value)) {
+                inputCustomerName.setCustomValidity("Invalid format. Please do not use special characters or numbers.");
+                isValid = false;
+            } else {
+                inputCustomerName.setCustomValidity("");
+            }
+        
+            if (inputEmail.value == "") {
+                inputEmail.setCustomValidity("Email field cannot be empty.");
+                isValid = false;
+            } else {
+                inputEmail.setCustomValidity("");
+            }
+        
+            if (inputPhone.value == "") {
+                inputPhone.setCustomValidity("Phone number cannot be empty.");
+                isValid = false;
+            } else if (!phoneNumberPattern.test(inputPhone.value)) {
+                inputPhone.setCustomValidity("Invalid format (accpets only 10 digit number). Please do not use special characters or alphabets.");
+                isValid = false;
+            } else {
+                inputPhone.setCustomValidity("");
+            }
+
+            if (inputAddress.value == "") {
+                inputAddress.setCustomValidity("Address field cannot be empty.");
+                isValid = false;
+            } else {
+                inputAddress.setCustomValidity("");
+            }
+        }
+    </script>
+</body>
+</html>

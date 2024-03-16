@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-sidebar">
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>Sale Invoice | Administrator</title>
+	<!--favicon-->
+	<link rel="icon" href="assets/images/favicon-32x32.png" type="image/png" />
+	<!--plugins-->
+	<link href="static/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="static/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="static/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+	<!-- loader-->
+	<link href="static/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="static/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="static/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&amp;family=Roboto&amp;display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="static/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="static/assets/css/app.css" />
+	<link rel="stylesheet" href="static/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="static/assets/css/dark-theme.css" />
+	<!-- PDF generation-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+</head>
+
+<body>
+	<!-- wrapper -->
+	<div class="wrapper">
+		{% include 'sidebar.html' %}		
+		<!--page-wrapper-->
+		<div class="page-wrapper">                    
+            <div class="page-content-wrapper">
+                {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <strong>{{ message }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+                <div class="page-content">
+					<div style="text-align: right;">
+						<div class="text-end dt-buttons btn-group">
+							<button type="button" onclick="printPageArea('invoice')" class="btn btn-dark"><i class="fa fa-print"></i> Print</button>
+							<button id="download" type="button" class="btn btn-danger"><i class="fa fa-file-pdf-o"></i> Export as PDF</button>
+							<button class="btn btn-dark buttons-html5"><span><a href="/generate_excel_for_sell?sell-billNo={{sellData.billNo}}" style="color:white;">Excel</a></span></button>
+						</div>
+						<hr style="margin-bottom:0px;">
+					</div>
+					<div class="card">
+						<div class="card-body">
+							<div id="invoice">
+								<div class="invoice overflow-auto" style="padding-top:0px;">
+									<div style="min-width: 600px">
+										<header>
+											<div class="row">
+												<div class="col">
+													<a href="javascript:;">
+														<img src="assets/images/logo-icon.png" width="80" alt="">
+													</a>
+												</div>
+												<div class="col company-details">
+													<h3 class="name">Rising Star All In One</h3>
+													<div class="phone">GSTIN: GST7873473Q16</div>
+													<div>Address: 301 To 305, 3rd Floor, Giriraj Enclave, Nikol, Ahmedabad, Gujarat 382350</div>
+													<div>Contact No: 9016115755</div>
+													<div class="email">Email: <a href="mailto:risingstarallinone@gmail.com">risingstarallinone@gmail.com</a></div>
+												</div>
+											</div>
+										</header>
+										<main>
+											<div class="row contacts">
+												<div class="col invoice-to">
+													<div class="text-gray-light">INVOICE TO:</div>
+													<h3 class="to">{{sellData.customerName}}</h3>
+													{% if sellData.customerGst != ''%}
+														<div class="phone">GSTIN: {{sellData.customerGst}}</div>
+													{% else%}
+														<div class="phone">GSTIN: Not available</div>
+													{% endif%}
+													<div class="address">Address: {{customerDetails.customerAddress}}</div>
+													<div class="phone">Contact No: {{customerDetails.customerPhone}}</div>
+													{% if customerDetails.customerEmail != ''%}
+														<div class="email">Email: <a href="mailto:{{customerDetails.customerEmail}}">{{customerDetails.customerEmail}}</a></div>
+													{% else%}
+														<div class="email">Email: Not available</a></div>
+													{% endif%}
+												</div>
+												<div class="col invoice-details">
+													<h5 class="invoice-id">Invoice No: {{sellData.billNo}}</h5>
+													<div class="date">Date of Invoice: {{sellData.billDate}}</div>
+												</div>
+											</div>
+											<table id="example2">
+												<thead>
+													<tr>
+														<th style="text-align: center;">No.</th>
+														<th class="text-left" style="text-align: center;padding:5px;">Description</th>
+														<th class="text-right" style="text-align: center;padding:5px;">Quantity</th>
+														<th class="text-right" style="text-align: center;padding:5px;">Unit</th>
+														<th class="text-right" style="text-align: center;padding:5px;">Price/unit</th>
+														<th class="text-right" style="text-align: center;padding:5px;">Amount</th>
+													</tr>
+												</thead>
+												<tbody>
+													{% for soldProduct in soldProducts%}
+														<tr>
+															<td class="no" style="text-align: center; padding:5px; width:10px;">{{forloop.counter}}</td>
+															<td class="text-left" style="text-align: center; padding:5px;">
+																<h3><a href="#" style="pointer-events: none;">{{soldProduct.product}}</a></h3>
+															</td>
+															<td class="unit" style="text-align: center; padding:5px;">{{soldProduct.quantity}}</td>
+															<td class="qty" style="text-align: center; padding:5px;">{{soldProduct.unit}}</td>
+															<td class="unit" style="text-align: center; padding:5px;">{{soldProduct.pricePerUnit}}</td>
+															<td class="total" style="text-align: center; padding:5px; width:200px;">{{soldProduct.amount}}</td>
+														</tr>
+													{% endfor%}
+													{% if otherExpensesData%}
+														<thead>
+															<tr>
+																<td style="background:white;"></td>
+															</tr>
+															<tr>
+																<td style="background:white;"></td>
+																<td style="background:white;"></td>
+																<td style="background:white;"></td>
+															</tr>
+															<tr>
+																<td style="background:white;"></td>
+															</tr>
+															<tr>
+																<th style="text-align: center;">No.</th>
+																<th class="text-left" style="text-align: center;padding:5px;">Expense</th>
+																<th class="text-right" style="text-align: center;padding:5px;">Amount</th>
+															</tr>
+														</thead>
+														<tbody>
+															{% for otherExpensesDatalist in otherExpensesData%}
+																<tr>
+																	<td class="no" style="text-align: center; padding:5px; width:10px;">{{forloop.counter}}</td>
+																	<td class="text-left" style="text-align: center; padding:5px;">
+																		<h3><a href="#" style="pointer-events: none;">{{otherExpensesDatalist.expenseType}}</a></h3>
+																	</td>
+																	<td class="total" style="text-align: center; padding:5px; width:100px;">{{otherExpensesDatalist.amount}}</td>
+																</tr>
+															{% endfor%}
+														</tbody>
+													{% endif%}
+												</tbody>
+												<tfoot>
+													<tr>
+														<td colspan="2"></td>
+														<td colspan="3">Total</td>
+														<td>&#8377;{{sellData.total}}</td>
+													</tr>
+													<tr>
+														{% if sellData.gst%}
+															<td colspan="2"></td>
+															<td colspan="3">GST 18%</td>
+															<td>&#8377;{{sellData.gst}}</td>
+														{% endif%}
+													</tr>
+													<tr>
+														{% if sellData.otherExpenses != 0.0%}
+															<td colspan="2"></td>
+															<td colspan="3">Total Other Expenses</td>
+															<td>&#8377;{{sellData.otherExpenses}}</td>
+														{% endif%}
+													</tr>
+													<tr>
+														<td colspan="2"></td>
+														<td colspan="3">Gross Total</td>
+														<td>&#8377;{{sellData.grossTotal}}</td>
+													</tr>
+													<tr>
+														{% if sellData.discount != 0.0%}
+															<td colspan="2"></td>
+															<td colspan="3">Discount</td>
+															<td>&#8377;{{sellData.discount}}</td>
+														{% endif%}
+													</tr>
+													<tr>
+														{% if sellData.paidAmount != 0.0%}
+															<td colspan="2"></td>
+															<td colspan="3">Paid amount</td>
+															<td>&#8377;{{sellData.paidAmount}}</td>
+														{% endif%}
+													</tr>
+													<tr>
+														<td colspan="2"></td>
+														<td colspan="3">Net total</td>
+														<td>&#8377;{{sellData.netTotal}}</td>
+													</tr>
+												</tfoot>
+											</table>
+											<div class="thanks" style="margin-top:0px;">Thank you!</div>
+											<div class="notices">
+												<div>Terms & condition*</div>
+												<div class="notice">
+													1. Goods once sold cannot be taken back or exchanged.<br>
+													2. Interest @24% p.a. will be charged for uncleared bills beyond 15 days.<br>
+													3. Subject to local Jurisdiction. 
+												</div>
+											</div>
+										</main>
+										<footer>This Invoice was created on a computer and is valid without the signature and seal.</footer>
+									</div>
+									<!--DO NOT DELETE THIS div. It is responsible for showing footer always at the bottom-->
+									<div></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+            </div>
+        </div>
+        <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>					
+	</div>
+	<!-- Bootstrap JS -->
+	<script src="static/assets/js/bootstrap.bundle.min.js"></script>
+	
+	<!--plugins-->
+	<script src="static/assets/js/jquery.min.js"></script>
+	<script src="static/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="static/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="static/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+	<!-- App JS -->
+	<script src="static/assets/js/app.js"></script>
+	<script>
+		function printInvoice(){
+			print();
+		}
+		window.onload = function () {
+			document.getElementById("download").addEventListener("click", () => {
+					const invoice = this.document.getElementById("invoice");
+					console.log(invoice);
+					console.log(window);
+					var opt = {
+						margin: [0.5, 0.5], // Adjust the margins as needed
+						filename: 'Sell-Invoice.pdf',
+						image: { type: 'jpeg', quality: 0.99 },
+						html2canvas: { scale: 2 },
+						jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+						html2pdf: {
+							// Customize the positioning of the content within the PDF
+							// You can adjust the positioning values based on your requirements
+							margin: { top: 0.5, right: 0.5, bottom: 0.5, left: 0.5 },
+							translate: { x: 0.5, y: 0.5 },
+						},
+					};
+					html2pdf().from(invoice).set(opt).save();
+				})
+		}
+		// For printing
+		function printPageArea(areaID){
+			var printContent = document.getElementById(areaID).innerHTML;
+			var originalContent = document.body.innerHTML;
+			document.body.innerHTML = printContent;
+			window.print();
+			document.body.innerHTML = originalContent;
+		}	
+	</script>
+</body>
+</html>

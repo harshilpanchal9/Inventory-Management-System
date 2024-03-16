@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-sidebar">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Add Purchase | IMS</title>
+    <!--favicon-->
+    <link rel="icon" href="assets/images/favicon-32x32.png" type="image/png" />
+    <!--plugins-->
+    <link href="static/assets/plugins/notifications/css/lobibox.min.css" rel="stylesheet" />
+    <!-- For Lobi notification-->
+    <link href="static/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+    <link href="static/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="static/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+    <link href="static/assets/plugins/select2/css/select2.min.css" rel="stylesheet" />
+    <!-- For customer search dropdown -->
+    <link href="static/assets/plugins/select2/css/select2-bootstrap4.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" />
+    <!-- loader-->
+    <link href="static/assets/css/pace.min.css" rel="stylesheet" />
+    <script src="static/assets/js/pace.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="static/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/flatly/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&amp;family=Roboto&amp;display=swap" />
+    <!-- Icons CSS -->
+    <link rel="stylesheet" href="static/assets/css/icons.css" />
+    <!-- App CSS -->
+    <link rel="stylesheet" href="static/assets/css/app.css" />
+    <link rel="stylesheet" href="static/assets/css/dark-sidebar.css" />
+    <link rel="stylesheet" href="static/assets/css/dark-theme.css" />
+
+    <style>
+        table td:last-child,
+        table th:last-child {
+            text-align: center;
+        }
+
+        .no-arrows::-webkit-inner-spin-button,
+        .no-arrows::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* This will hide the scrollbar in Google Chrome and Safari */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        .required:after {
+            content: " *";
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- wrapper -->
+    <div class="wrapper">
+        {% include 'sidebar.html' %}
+        <!--page-wrapper-->
+        <div class="page-wrapper">
+            <div class="page-content-wrapper">
+                {% if messages %} {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    <strong>{{ message }}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %} {% endif %}
+
+                <div class="page-content">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card border-top border-0 border-4 border-primary">
+                                <div class="card-body p-5">
+                                    <div class="card-title d-flex align-items-center">
+                                        <h5 class="mb-0 text-primary">New purchase</h5>
+                                        <div class="parent-icon" onclick="openCalculator()" style="scale:2.2;margin-left: auto;padding-right:5px;cursor:pointer;color:#673ab7;">
+                                            <i class="bx bx-calculator"></i>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <form class="row g-3" action="/add-purchase" method="POST"
+                                        enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="row g-3" style="justify-content: space-between">
+                                            <div class="col-md-2 left">
+                                                <label for="inputPurchaseBillNo" class="form-label">Invoice
+                                                    no.</label>
+                                                <input type="text" class="form-control" name="billNo"
+                                                    id="inputInvoiceNo" value="{{billNo}}" readonly />
+                                            </div>
+                                            <div class="col-md-2 right">
+                                                <label for="inputBillDate" class="form-label required">Bill Date</label>
+                                                <input type="date" class="form-control" name="billDate"
+                                                    id="inputBillDate" required />
+                                            </div>
+                                        </div>
+                                        <div class="row g-3">
+                                            <div class="col-md-3">
+                                                <label for="inputSupplier" class="form-label required">Supplier</label>
+                                                <select name="supplier" id="selectSupplier"
+                                                    class="form-control form-select single-select" required>
+                                                    <option value="Select supplier" selected hidden>Select supplier
+                                                    </option>
+                                                    {% for supplier in suppliers %}
+                                                        <option value="{{supplier.supplierId}}">{{supplier.supplierName}}
+                                                        </option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <label for="inputPhone" class="form-label required">Phone</label>
+                                                <input type="phone" class="form-control" name="supplierPhone"
+                                                    id="inputPhone" readonly required />
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label for="inputGSTIN" class="form-label">GSTIN</label>
+                                                <input type="text" class="form-control" name="supplierGst"
+                                                    id="inputGSTIN" readonly />
+                                            </div>
+                                        </div>
+
+                                        <div class="row g-3">
+                                            <table class="table table-responsive table-bordered" id="myTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col">#</th>
+                                                        <th scope="col" class="required">Product</th>
+                                                        <th scope="col" class="required">Quantity</th>
+                                                        <th scope="col" class="required">Unit</th>
+                                                        <th scope="col" class="required">Price/unit</th>
+                                                        <th scope="col" class="required">Amount</th>
+                                                        <th scope="col">
+                                                            <!-- <button class="btn btn-primary add-row-btn px-2" type="button"> -->
+                                                            <i class="fa fa-plus-circle fa-2x add-row-btn"
+                                                                id="add-row-btn" aria-hidden="true"
+                                                                style="color: #673ab7; cursor: pointer;"></i>
+                                                            <!-- </button> -->
+                                                        </th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="purchaseRows">
+                                                    <tr>
+                                                        <th scope="row">1</th>
+                                                        <td>
+                                                            <input type="text" class="form-control shadow-none"
+                                                                name="product_1" autocomplete="off" required />
+                                                        </td>
+                                                        <td>
+                                                            <input type="number"
+                                                                class="form-control shadow-none no-arrows"
+                                                                name="quantity_1" onchange="computeAmount(1)"
+                                                                required />
+                                                        </td>
+                                                        <td>
+                                                            <select name="unit_1" class="form-select form-control"
+                                                                style="box-shadow: none;" required>
+                                                                <option value="Pieces" selected>Pieces</option>
+                                                                <option value="Dozen">Dozen</option>
+                                                                <option value="Grams">Grams</option>
+                                                                <option value="Kilograms">Kilograms</option>
+                                                                <option value="Milliliters">Milliliters</option>
+                                                                <option value="Liters">Liters</option>
+                                                                <option value="Meters">Meters</option>
+                                                                <option value="Centimeters">Centimeters</option>
+                                                                <option value="Inches">Inches</option>
+                                                                <option value="Feet">Feet</option>
+                                                                <option value="Yards">Yards</option>
+                                                                <option value="Pounds">Pounds</option>
+                                                                <option value="Gallons">Gallons</option>
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            <input type="number" step="0.01" class="form-control shadow-none no-arrows" name="pricePerUnit_1" required onchange="computeAmount(1)" />
+                                                        </td>
+                                                        <td>
+                                                            <input type="number"
+                                                                class="form-control shadow-none no-arrows"
+                                                                name="amount_1" required readonly />
+                                                        </td>
+
+                                                        <td>
+                                                            <button class="btn btn-sm btn-danger delete-row-btn"
+                                                                style="background-color:red;" type="button">
+                                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div class="row g-3" style="justify-content: space-between; height: auto;">
+                                            <div style="width: 60%;">
+                                                <div class="col-md-8" style="margin-right: 20px;">
+                                                    <table class="table table-responsive table-bordered"
+                                                        id="expenseTable">
+                                                        <thead>
+                                                            <tr>
+                                                                <th scope="col">#</th>
+                                                                <th scope="col">Expense</th>
+                                                                <th scope="col">Amount</th>
+                                                                <th scope="col">
+                                                                    <!-- <button class="btn btn-primary add-row-btn px-2" type="button"> -->
+                                                                    <i class="fa fa-plus-circle fa-2x add-expense-btn"
+                                                                        id="add-expense-btn" aria-hidden="true"
+                                                                        style="color: #673ab7; cursor: pointer;"></i>
+                                                                    <!-- </button> -->
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="expenseRows">
+                                                            <tr>
+                                                                <th scope="row">1</th>
+                                                                <td>
+                                                                    <select name="expenseType_1"
+                                                                        class="form-select form-control">
+                                                                        <option value="Transportation" selected>
+                                                                            Transportation
+                                                                        </option>
+                                                                        <option value="Labour">Labour</option>
+                                                                        <option value="Courier">Courier</option>
+                                                                        <option value="Miscellaneous">Miscellaneous
+                                                                        </option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number"
+                                                                        class="form-control shadow-none no-arrows"
+                                                                        name="expenseAmount_1"
+                                                                        onchange="computeOtherExpenses()" />
+                                                                </td>
+                                                                <td>
+                                                                    <button
+                                                                        class="btn btn-sm btn-danger delete-expense-btn"
+                                                                        style="background-color:red;" type="button">
+                                                                        <i class="fa fa-trash" aria-hidden="true"></i>
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <div class="col-md-2" style="margin-right: 20px;padding-top: 10px;">
+                                                    <label for="inputPaymentType" class="form-label required">Payment
+                                                        type</label>
+                                                    <select name="paymentType" id="inputPaymentType"
+                                                        class="form-select form-control" required>
+                                                        <option value="Cash" selected>Cash</option>
+                                                        <option value="Cheque">Cheque</option>
+                                                        <option value="UPI">UPI</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4 mt-3">
+                                                    <label for="inputDescription" class="form-label">Description</label>
+                                                    <textarea class="form-control" name="description"
+                                                        id="inputDescription" placeholder="Description"
+                                                        rows="3"></textarea>
+                                                </div>
+                                                <div class="col-md-4 mt-3">
+                                                    <label for="uploadBill" class="form-label ">Upload Bill</label>
+                                                    <input type="file" class="form-control" id="upload-bill"
+                                                        name="upload-bill" maxlength="1048576" accept=".jpeg,.jpg,.png"
+                                                        >
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2" style="display: inline-block;">
+                                                <div>
+                                                    <label for="showTotal" class="form-label">Total</label>
+                                                    <input type="text" name="total" class="form-control" id="ShowTotal"
+                                                        readonly required />
+                                                </div>
+                                                <div class="showGST" style="padding-top: 10px; ">
+                                                    <label for="showGST" class="form-label">GST (18%)</label>
+                                                    <input type="text" name="gst" class="form-control" id="showGST"
+                                                        readonly required />
+                                                </div>
+                                                <div class="otherExpenses" style="padding-top: 10px; ">
+                                                    <label for="otherExpenses" class="form-label">Other expenses</label>
+                                                    <input type="text" name="otherExpenses" class="form-control"
+                                                        id="otherExpenses" readonly />
+                                                </div>
+                                                <div class="showGrossTotal" style="padding-top: 10px;">
+                                                    <label for="showGrossTotal" class="form-label">Gross total</label>
+                                                    <input type="text" name="grossTotal" class="form-control"
+                                                        id="showGrossTotal" readonly required />
+                                                </div>
+                                                <div class="discount" style="padding-top: 10px; ">
+                                                    <label for="discount" class="form-label">Discount</label>
+                                                    <input type="text" name="discount" class="form-control"
+                                                        id="discount" autocomplete="off" />
+                                                </div>
+                                                <div class="showNetTotal" style="padding-top: 10px;">
+                                                    <label for="showNetTotal" class="form-label">Net total</label>
+                                                    <input type="text" name="netTotal" class="form-control"
+                                                        id="showNetTotal" readonly required />
+                                                </div>
+                                                <div class="paidAmount" style="padding-top: 10px;">
+                                                    <label for="paidAmount" class="form-label">Paid Amount</label>
+                                                    <input type="text" name="paidAmount" class="form-control"
+                                                        id="paidAmount" autocomplete="off" readonly />
+                                                </div>
+                                                <div class="form-check pt-2"
+                                                    style="padding-left: 2em; display: flex; justify-content: space-between;">
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input"
+                                                            name="includeGST" id="includeGSTCheckbox"
+                                                            value="Include GST">
+                                                        Include GST
+                                                    </label>
+                                                    <label class="form-check-label">
+                                                        <input type="checkbox" class="form-check-input" name="roundOff"
+                                                            id="roundOffCheckbox" value="roundOff">
+                                                        Round Off
+                                                    </label>
+                                                </div>
+                                                <div class="form-check pt-2" style="padding-left: 5px; display: flex; justify-content: space-between;">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input radioCheckbox" type="radio" name="onCredit" id="onCreditCheckbox" onchange="handleCheckboxChange(this)" onclick="creditCheckbox()" value="On Credit">
+                                                        <label class="form-check-label" for="inlineRadio1">On Credit</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline" style="margin-right: 5px;">
+                                                        <input class="form-check-input radioCheckbox" type="radio" name="fullyPaid" id="onCreditCheckbox" onchange="handleCheckboxChange(this)" onclick="fullyPaidcheckbox()" value="Fully Paid" checked>
+                                                        <label class="form-check-label" for="inlineRadio1">Fully Paid</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-12" style="justify-self: right;">
+                                            <div>
+                                                <button type="submit" onclick="return validateInput()" class="btn btn-primary px-5">Save</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="javaScript:;" class="back-to-top"><i class="bx bxs-up-arrow-alt"></i></a>
+
+    <!-- Bootstrap JS -->
+    <script src="static/assets/js/bootstrap.bundle.min.js"></script>
+
+    <!--plugins-->
+    <script src="static/assets/js/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="static/assets/plugins/simplebar/js/simplebar.min.js"></script>
+    <script src="static/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+    <script src="static/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+    <script src="static/assets/plugins/edittable/bstable.js"></script>
+    <script src="static/assets/plugins/select2/js/select2.min.js"></script> <!-- For search supplier dropdown -->
+    <!-- Notification -->
+    <script src="static/assets/plugins/notifications/js/lobibox.min.js"></script>
+    <script src="static/assets/plugins/notifications/js/notifications.min.js"></script>
+    <script src="static/assets/plugins/notifications/js/notification-custom-script.js"></script>
+
+    <script>
+        function handleCheckboxChange(checkbox) {
+            var checkboxes = document.getElementsByClassName('radioCheckbox');
+            for (var i = 0; i < checkboxes.length; i++) {
+                if (checkboxes[i] !== checkbox) {
+                    checkboxes[i].checked = false;
+                }
+            }
+        } 
+          
+        // To open a calculator
+        function openCalculator(){
+            $.ajax({
+                url: "/add-purchase",
+                data: { 'calculator': 'calculator' },
+                success: function (data) {
+                }
+            });
+        }
+
+        const fileInput = document.getElementById('upload-bill');
+        const maxFileSize = 1097152; // 2 MB in bytes
+
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+
+            if (file.size > maxFileSize) {
+                alert('File size exceeds the maximum limit of 1 MB.');
+                fileInput.value = ''; // Clear the selected file
+            }
+            else if (file.type != 'image/jpg' && file.type != 'image/png' && file.type != 'image/jpeg') {
+                alert('Invalid image type.');
+                fileInput.value = ''; // Clear the selected file
+            }
+        });
+
+        // To print today date in date picker
+        document.addEventListener('DOMContentLoaded', function () {
+            var today = new Date().toISOString().split('T')[0]; // Get the current date in the 'YYYY-MM-DD' format
+            document.getElementById('inputBillDate').value = today; // Set the default value of the datetime picker
+        });
+
+        // For search supplier dropdown
+        $('.single-select').select2({
+            theme: 'bootstrap4',
+            width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+            placeholder: $(this).data('placeholder'),
+            allowClear: Boolean($(this).data('allow-clear')),
+        });
+
+        // Round Off Gross Total
+        var totalInput = document.getElementById("showNetTotal");
+        var originalValue = parseFloat(totalInput.value); // Store the original value as a number
+        var roundedValue = null; // Store the rounded value
+        var storeOldTotal;
+        function roundOffTotal() {
+            var roundOffCheckbox = document.getElementById("roundOffCheckbox");
+            var total = parseFloat(totalInput.value);
+            if (roundOffCheckbox.checked) {
+                var decimalPart = total - Math.floor(total); // Get the decimal portion of the total value
+                storeOldTotal = total;
+                if (decimalPart < 0.5) {
+                    roundedValue = Math.floor(total); // Round down to the nearest whole number
+                } else {
+                    roundedValue = Math.ceil(total); // Round up to the nearest whole number
+                }
+                totalInput.value = roundedValue.toFixed(2); // Format the rounded total to two decimal places
+            } else {
+                totalInput.value = storeOldTotal.toFixed(2);
+                storeOldTotal = 0.00;
+            }
+        }
+        document.getElementById("roundOffCheckbox").addEventListener("click", roundOffTotal);
+
+        $(document).ready(function () {
+            var roundOffCheckbox = document.getElementById("roundOffCheckbox");
+            roundOffCheckbox.disabled = true;
+
+            $("#selectSupplier").on('change', function () {
+                // Get the selected supplier ID
+                var supplierId = $(this).val();
+
+                // Send an AJAX request to get the supplier data
+                if (supplierId) {
+                    $.ajax({
+                        url: "/get-supplier-data",
+                        data: { 'supplierId': supplierId },
+                        success: function (data) {
+                            console.log('Success')
+                            // Update the input fields with the supplier data
+                            $("#inputPhone").val(data.phone);
+                            $("#inputGSTIN").val(data.gst);
+
+                            if (data.gst != '') {
+                                var includeGSTCheckbox = document.getElementById('includeGSTCheckbox');
+                                includeGSTCheckbox.checked = true;
+                                computeTotal(true);
+                            } else {
+                                var includeGSTCheckbox = document.getElementById('includeGSTCheckbox');
+                                includeGSTCheckbox.checked = false;
+                                computeTotal(false);
+                            }
+                        },
+                        error: function (xhr) {
+                            console.log(xhr.responseText);
+                        }
+                    });
+                }
+                else {
+                    $('#selectSupplier').val('');
+                }
+            });
+        });
+    </script>
+
+    <script>
+        const includeGSTCheckbox = document.getElementById('includeGSTCheckbox');
+        $(document).ready(function () {
+            var roundOffCheckbox = document.getElementById("roundOffCheckbox");
+            roundOffCheckbox.disabled = true;
+            var currentDate = new Date();
+            $("#datetimepicker").datetimepicker({
+                value:
+                    currentDate.getDate() +
+                    "-" +
+                    currentDate.getMonth() +
+                    "-" +
+                    currentDate.getFullYear(),
+                format: "dd-mm-yyyy",
+            });
+
+            // For purchased products
+            var purchasedProductsTable = document.getElementById('myTable');
+            var addRowButton = document.getElementById('add-row-btn');
+
+            addRowButton.addEventListener('click', function () {
+                var rowCounter = purchasedProductsTable.rows.length;
+                console.log(rowCounter);
+                var newRow = document.createElement('tr');
+                newRow.innerHTML = `
+					<th scope="row"></th>
+					<td><input type="text" class="form-control shadow-none" name="product_${rowCounter}" autocomplete="off" required/></td>
+					<td><input type="number" id="quantity" class="form-control shadow-none no-arrows" name="quantity_${rowCounter}" required onchange="computeAmount(${rowCounter})"/></td>
+					<td><select name="unit_${rowCounter}" id="unit" class="form-select form-control" required>
+                        <option value="Pieces" selected>Pieces</option>
+                        <option value="Dozen">Dozen</option>
+                        <option value="Grams">Grams</option>
+                        <option value="Kilograms">Kilograms</option>
+                        <option value="Milliliters">Milliliters</option>
+                        <option value="Liters">Liters</option>
+                        <option value="Meters">Meters</option>
+                        <option value="Centimeters">Centimeters</option>
+                        <option value="Inches">Inches</option>
+                        <option value="Feet">Feet</option>
+                        <option value="Yards">Yards</option>
+                        <option value="Pounds">Pounds</option>
+                        <option value="Gallons">Gallons</option>
+                    </select></td>
+					<td><input type="number" id="pricePerUnit" step="0.01" class="form-control shadow-none no-arrows" name="pricePerUnit_${rowCounter}" required onchange="computeAmount(${rowCounter})"/></td>
+					<td><input type="number" class="form-control shadow-none no-arrows" name="amount_${rowCounter}" required readonly/></td>
+					<td><button class="btn btn-sm btn-danger delete-row-btn" style="background-color:red;" type="button"><i class="fa fa-trash" aria-hidden="true"></i></button></td>`
+                purchasedProductsTable.querySelector('tbody').appendChild(newRow);
+                rowCounter++;
+                updateRowNumber();
+                $('input[name^="quantity"], input[name^="pricePerUnit"], input[name^="amount_"], input[name^="discount"], input[name^="expenseAmount_"]').on('change', function () {
+                    var roundOffCheckbox = document.getElementById("roundOffCheckbox");
+                    roundOffCheckbox.disabled = false;
+                    if (includeGSTCheckbox.checked) {
+                        computeTotal(true);
+                    } else {
+                        computeTotal(false);
+                    }
+                });
+            });
+
+            // For expense table
+            var expenseTable = document.getElementById('expenseTable');
+            var addExpenseButton = document.getElementById('add-expense-btn');
+
+            addExpenseButton.addEventListener('click', function () {
+                var rowCounter = expenseTable.rows.length;
+                var newRow = document.createElement('tr');
+                newRow.innerHTML = `
+					<th scope="row">${rowCounter}</th>
+                    <td><select name="expenseType_${rowCounter}" class="form-select form-control" required><option value="Transportation" selected>Transportation</option><option value="Labour">Labour</option><option value="Courier">Courier</option><option value="Miscellaneous">Miscellaneous</option></select></td>
+					<td><input type="number" class="form-control shadow-none no-arrows" name="expenseAmount_${rowCounter}" required onchange="computeOtherExpenses()"/></td>
+					<td><button class="btn btn-sm btn-danger delete-expense-btn" style="background-color:red;" type="button"><i class="fa fa-trash" aria-hidden="true"></i></button></td>`
+                expenseTable.querySelector('tbody').appendChild(newRow);
+                rowCounter++;
+                updateExpenseRowNumber();
+                $('input[name^="quantity"], input[name^="pricePerUnit"], input[name^="amount_"], input[name^="discount"], input[name^="expenseAmount_"]').on('change', function () {
+                    var roundOffCheckbox = document.getElementById("roundOffCheckbox");
+                    roundOffCheckbox.disabled = false;
+                    if (includeGSTCheckbox.checked) {
+                        computeTotal(true);
+                    } else {
+                        computeTotal(false);
+                    }
+                });
+            });
+
+            // Delete row button click event
+            $(document).on("click", ".delete-row-btn", function () {
+                var rowCount = $("#myTable tbody tr").length;
+                $(this).closest("tr").remove();
+                updateRowNumber();
+                if (includeGSTCheckbox.checked) {
+                    computeTotal(true);
+                } else {
+                    computeTotal(false);
+                }
+            });
+
+            $(document).on("click", ".delete-expense-btn", function () {
+                var rowCount = $("#expenseTable tbody tr").length;
+                $(this).closest("tr").remove();
+                updateExpenseRowNumber();
+                if (includeGSTCheckbox.checked) {
+                    computeTotal(true);
+                } else {
+                    computeTotal(false);
+                }
+            });
+        }); // Document ready function ends here
+
+        function computeAmount(index) {
+            var quantity = document.getElementsByName("quantity_" + index)[0].value;
+            var pricePerUnit = document.getElementsByName("pricePerUnit_" + index)[0].value;
+            var amount = (quantity * pricePerUnit).toFixed(2);
+            document.getElementsByName("amount_" + index)[0].value = amount;
+        }
+
+        function computeOtherExpenses() {
+            var totalExpense = 0.0;
+            $('input[name^="expenseAmount_"]').each(function () {
+                var amount = $(this).val();
+                if (amount != '') {
+                    totalExpense += parseFloat(amount);
+                }
+            });
+            var otherExpenses = document.getElementById('otherExpenses');
+            otherExpenses.value = totalExpense;
+            return totalExpense;
+        }
+
+        function computeTotal(includeGstChecked = false) {
+            var totalAmount = 0.0;
+            $('input[name^="amount_"]').each(function () {
+                var amount = $(this).val();
+                if (amount != '') {
+                    totalAmount += parseFloat(amount);
+                }
+            });
+
+            var gstin = document.getElementById("inputGSTIN").value;
+            if (gstin != '') {
+                includeGSTCheckbox.disabled = false;
+                if (includeGstChecked) {
+                    var gst = totalAmount * 0.18;
+                    computeGrossTotal(totalAmount, gst);
+                } else {
+                    console.log("inside else gst");
+                    $('input[name="gst"]').val('0.00');
+                    var gst = 0.0;
+                    console.log(totalAmount);
+                    computeGrossTotal(totalAmount, gst);
+                }
+            }
+            else {
+                includeGSTCheckbox.disabled = true;
+                $('input[name="gst"]').val('0.00');
+                var gst = 0.0;
+                computeGrossTotal(totalAmount, gst);
+            }
+
+            // update the total field with the computed value
+            $('input[name="total"]').val(totalAmount.toFixed(2));
+        }
+
+        function computeGrossTotal(totalAmount, gst) {
+            $('input[name="gst"]').val(gst.toFixed(2));
+            var discount = document.getElementById("discount");
+            var totalOtherExpense = computeOtherExpenses();
+            var grossTotal = totalAmount + gst + totalOtherExpense;
+            var netTotal = grossTotal - discount.value;
+
+            $('input[name="grossTotal"]').val(grossTotal.toFixed(2));
+            $('input[name="netTotal"]').val(netTotal.toFixed(2));
+            $('input[name="paidAmount"]').val(netTotal.toFixed(2));
+        }
+
+        // call the computeTotal function whenever the quantity or price fields are changed		
+        $('input[name^="quantity"], input[name^="pricePerUnit"], input[name^="amount_"], input[name^="discount"], input[name^="expenseAmount_"]').on('change', function () {
+            var roundOffCheckbox = document.getElementById("roundOffCheckbox");
+            roundOffCheckbox.disabled = false;
+            if (includeGSTCheckbox.checked) {
+                console.log('the checked');
+                computeTotal(true);
+            } else {
+                console.log('the unchecked');
+                computeTotal(false);
+            }
+        });
+
+        function updateRowNumber() {
+            $("#myTable tbody tr").each(function (index) {
+                $(this)
+                    .find("th")
+                    .text(index + 1);
+            });
+        }
+
+        function updateExpenseRowNumber() {
+            $("#expenseTable tbody tr").each(function (index) {
+                $(this)
+                    .find("th")
+                    .text(index + 1);
+            });
+        }
+        computeTotal(true);
+
+        includeGSTCheckbox.addEventListener('change', function () {
+            if (includeGSTCheckbox.checked) {
+                console.log('checked');
+                computeTotal(true);
+            }
+            else {
+                console.log('unchecked');
+                computeTotal(false);
+            }
+        });
+
+        // For On credit and Fully Paid
+        function creditCheckbox(){
+            $('input[name="paidAmount"]').prop('readonly', false);
+        }
+
+        function fullyPaidcheckbox(){
+            var showNetTotal = document.getElementById("showNetTotal");
+            $('input[name="paidAmount"]').val(showNetTotal.value);
+            $('input[name="paidAmount"]').prop('readonly', true);
+        }
+
+        // Input validation
+        function validateInput() {
+            var productQuantity = document.querySelectorAll("[name^='quantity']");
+            var pricePerUnit = document.querySelectorAll("[name^='pricePerUnit']");
+            var productName = document.querySelectorAll("[name^='product']");
+            var selectSupplier = document.getElementById("selectSupplier");
+            var inputBillDate = document.getElementById("inputBillDate");
+            var paidAmount = document.getElementById("paidAmount");
+            var netTotal = document.getElementById("showNetTotal");
+            var tbody = document.getElementById('purchaseRows');
+            var tableRows = tbody.querySelectorAll('tr');
+            
+            var number = /^[0-9]+$/;
+            var floatnumber = /^[0-9.]+$/;
+            var alphanumeric = /^[a-zA-Z0-9\s]*$/;
+            var isValid = true;
+            var initialDropdownValue = "Select supplier";
+            if (tableRows.length == 0) {
+                Lobibox.notify('default', {
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    position: 'center top',
+                    size: 'mini',
+                    msg: 'Please enter atleast one data to proceed further.'
+                });
+                isValid = false;
+                return isValid;
+            } else {
+                if (!inputBillDate.value) {
+                    Lobibox.notify("default", {
+                        pauseDelayOnHover: true,
+                        continueDelayOnInactiveTab: false,
+                        position: "center top",
+                        size: "mini",
+                        msg: "Please select a date."
+                    });
+                    isValid = false;
+                    return isValid;
+                }
+                if (selectSupplier.value === initialDropdownValue) {
+                    Lobibox.notify("default", {
+                        pauseDelayOnHover: true,
+                        continueDelayOnInactiveTab: false,
+                        position: "center top",
+                        size: "mini",
+                        msg: "Please select an option from the Supplier list."
+                    });
+                    isValid = false;
+                    return isValid;
+                }
+                for (let i = 0; i < productName.length; i++) {
+                    const p_name = productName[i];
+                    if (p_name.value === "" || p_name.value === null) {
+                        Lobibox.notify("default", {
+                            pauseDelayOnHover: true,
+                            continueDelayOnInactiveTab: false,
+                            position: "center top",
+                            size: "mini",
+                            msg: "Product name cannot be empty."
+                        });
+                        isValid = false;
+                        return isValid;
+                    } else if (!alphanumeric.test(p_name.value)) {
+                        Lobibox.notify("default", {
+                            pauseDelayOnHover: true,
+                            continueDelayOnInactiveTab: false,
+                            position: "center top",
+                            size: "mini",
+                            msg: "Invalid format. Please enter a valid product name."
+                        });
+                        isValid = false;
+                        return isValid;
+                    }
+                }
+
+                for (let i = 0; i < productQuantity.length; i++) {
+                    const quantity = productQuantity[i];
+                    if (quantity.value === "" || quantity.value === null) {
+                        Lobibox.notify("default", {
+                            pauseDelayOnHover: true,
+                            continueDelayOnInactiveTab: false,
+                            position: "center top",
+                            size: "mini",
+                            msg: "Quantity value cannot be empty."
+                        });
+                        isValid = false;
+                        return isValid;
+                    } else if (parseInt(quantity.value) === 0) {
+                        Lobibox.notify('default', {
+                            pauseDelayOnHover: true,
+                            continueDelayOnInactiveTab: false,
+                            position: 'center top',
+                            size: 'mini',
+                            msg: 'Quantity value cannot be 0. Please enter a valid value greater than 0 or update the Stock data.'
+                        });
+                        isValid = false;
+                        return isValid;
+                    } else if (!number.test(quantity.value)) {
+                        Lobibox.notify("default", {
+                            pauseDelayOnHover: true,
+                            continueDelayOnInactiveTab: false,
+                            position: "center top",
+                            size: "mini",
+                            msg: "Invalid format. Please enter a valid number."
+                        });
+                        isValid = false;
+                        return isValid;
+                    }
+                }
+                for (let i = 0; i < pricePerUnit.length; i++) {
+                    const unitPrice = pricePerUnit[i];
+                    if (unitPrice.value === "" || unitPrice.value === null) {
+                        Lobibox.notify("default", {
+                            pauseDelayOnHover: true,
+                            continueDelayOnInactiveTab: false,
+                            position: "center top",
+                            size: "mini",
+                            msg: "Price/unit value cannot be empty."
+                        });
+                        isValid = false;
+                        return isValid;
+                    } else if (parseInt(unitPrice.value) === 0) {
+                        Lobibox.notify('default', {
+                            pauseDelayOnHover: true,
+                            continueDelayOnInactiveTab: false,
+                            position: 'center top',
+                            size: 'mini',
+                            msg: 'Price/unit value cannot be 0. Please enter a valid value greater than 0.'
+                        });
+                        isValid = false;
+                        return isValid;
+                    } else if (!floatnumber.test(unitPrice.value)) {
+                        Lobibox.notify("default", {
+                            pauseDelayOnHover: true,
+                            continueDelayOnInactiveTab: false,
+                            position: "center top",
+                            size: "mini",
+                            msg: "Invalid format. Please enter a valid number."
+                        });
+                        isValid = false;
+                        return isValid;
+                    }
+                }
+                if(paidAmount.value > netTotal.value){
+                    Lobibox.notify("default", {
+                        pauseDelayOnHover: true,
+                        continueDelayOnInactiveTab: false,
+                        position: "center top",
+                        size: "mini",
+                        msg: "Paid amount cannot exceeds the amount of Net Total."
+                    });
+                    isValid = false;
+                    return isValid;
+                }
+            }
+        }  
+    </script>
+    <!-- App JS -->
+    <script src="static/assets/js/app.js"></script>
+</body>
+
+</html>

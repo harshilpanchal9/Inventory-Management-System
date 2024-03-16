@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-sidebar">
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>Support | Administrator</title>
+	<!--favicon-->
+	<link rel="icon" href="assets/images/favicon-32x32.png" type="image/png" />
+	<!--plugins-->
+	<link href="static/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="static/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="static/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+	<!-- loader-->
+	<link href="static/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="static/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="static/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&amp;family=Roboto&amp;display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="static/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="static/assets/css/app.css" />
+	<link rel="stylesheet" href="static/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="static/assets/css/dark-theme.css" />
+	<style>
+		body {
+		  font-family: Arial, sans-serif;
+		  line-height: 1.6;
+		  background-color: #f7f7f7;
+		  padding: 20px;
+		}
+	
+		h1 {
+		  color: #333;
+		  font-size: 28px;
+		  margin-bottom: 20px;
+		}
+	
+		p {
+		  color: #555;
+		  font-size: 16px;
+		  margin-bottom: 15px;
+		}
+	
+		.container {
+		  background-color: #fff;
+		  border-radius: 5px;
+		  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		  padding: 30px;
+		  max-width: inherit; 
+		  margin: 0 auto;
+		}
+	
+		.highlight {
+		  background-color: #f2f2f2;
+		  padding: 10px;
+		  border-radius: 5px;
+		  margin-bottom: 15px;
+		}
+	
+		.btn {
+		  display: inline-block;
+		  background-color: #673ab7;
+		  color: #ffffff;
+		  padding: 10px 20px;
+		  text-decoration: none;
+		  border-radius: 5px;
+		  transition: background-color 0.3s ease;
+		}
+	
+		.btn:hover {
+		  background-color: #ffffff;
+		  color:#673ab7;
+		  border: solid 1px #673ab7;
+		  border-radius: 5px;
+		}
+	  </style>
+</head>
+
+<body>
+	<!-- wrapper -->
+	<div class="wrapper">
+		{% include 'sidebar.html' %}		
+		<!--page-wrapper-->
+		<div class="page-wrapper">                    
+            <div class="page-content-wrapper">
+                {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <strong>{{ message }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+				<div class="container">
+					<h1>Support Policy for Inventory Management System</h1>
+				
+					<div class="highlight">
+					  <p>Thank you for using our <strong>Inventory Management System (IMS)</strong>. We are committed to providing you with reliable support to ensure the smooth operation of your system. This support policy outlines the level of support and services you can expect from us.</p>
+					</div>
+				
+					<h4>Support Channels:</h4>
+					<p>- Email Support: You can reach out to us via email at <strong><a href="mailto:risingstarallinone@gmail.com">risingstarallinone@gmail.com</a></strong> for any support-related inquiries or issues.</p>
+					<p>- Online Help Center: We maintain an online help center with documentation, FAQs, and user guides to assist you in using the IMS effectively.</p>
+				
+					<h4>Support Scope:</h4>
+					<p>- Technical Assistance: We provide technical support for any issues related to the functionality, installation, configuration, and usage of the IMS.</p>
+					<p>- Bug Fixes: If you encounter any software bugs or errors, we will promptly investigate and provide bug fixes as necessary.</p>
+					<p>- General Inquiries: You can contact us for general inquiries, feature requests, or clarification on IMS capabilities.</p>
+				
+					<h4>Exclusions:</h4>
+					<p>- Customization: Support does not cover customization or modification of the IMS to meet specific requirements. However, we provide guidance and documentation for extending the IMS if needed.</p>
+					<p>- Third-Party Integrations: Support for issues related to third-party integrations or dependencies is limited to general advice and guidance.</p>
+				
+					<h4>Response Time:</h4>
+					<p>- We strive to respond to your support requests in a timely manner. Our target response time is within 24-48 hours on business days.</p>
+					<p>- Response time may vary depending on the complexity of the issue and the volume of support requests we receive.</p>
+				
+					<h4>Updates and Upgrades:</h4>
+					<p>- We regularly release updates and upgrades to enhance the IMS functionality, security, and performance. These updates may include bug fixes, new features, and improvements.</p>
+					<p>- We recommend keeping your IMS up to date by installing the latest updates to ensure optimal performance and access to new features.</p>
+				
+					<h4>Training and Documentation:</h4>
+					<p>- We provide comprehensive user documentation and guides to help you understand and navigate the IMS system effectively.</p>
+					<p>- If you require additional training or onboarding assistance, we offer optional training programs or consulting services at an additional cost.</p>
+				
+					<h4>System Requirements:</h4>
+					<p>- It is your responsibility to ensure that your system meets the minimum requirements for running the IMS. Please refer to the system requirements documentation provided for guidance.</p>
+				
+					<h4>Data Backup and Security:</h4>
+					<p>- Regularly back up your IMS data to prevent data loss. We are not responsible for any data loss or corruption resulting from failure to perform regular backups.</p>
+					<p>- Implement proper security measures, such as user access control, to safeguard your data and protect your system from unauthorized access.</p>
+				
+					<p>Note: This support policy is subject to change, and any updates will be communicated to you through the appropriate channels.</p>
+				
+					<p>We value your business and are committed to providing you with reliable support for your Inventory Management System. If you have any questions or need assistance, please don't hesitate to contact our support team.</p>
+				
+					<p>Thank you for choosing our IMS system!</p>
+				
+					<h5 style="margin-top:20px;color:#673ab7;"><b>Rising Star All In One</b></h5>
+					<p style="margin-top:30px;"><a href="https://official.risingstarallinone.com/" class="btn">Contact Support</a></p>
+				  </div>
+
+            </div>
+        </div>
+        <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>					
+	</div>
+	<!-- Bootstrap JS -->
+	<script src="static/assets/js/bootstrap.bundle.min.js"></script>
+	
+	<!--plugins-->
+	<script src="static/assets/js/jquery.min.js"></script>
+	<script src="static/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="static/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="static/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+	<!-- App JS -->
+	<script src="static/assets/js/app.js"></script>
+</body>
+</html>

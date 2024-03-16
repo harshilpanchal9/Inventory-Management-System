@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-sidebar">
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>Edit Product | Administrator</title>
+	<!--favicon-->
+	<link rel="icon" href="assets/images/favicon-32x32.png" type="image/png" />
+	<!--plugins-->
+	<link href="static/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="static/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="static/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+	<!-- loader-->
+	<link href="static/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="static/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="static/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&amp;family=Roboto&amp;display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="static/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="static/assets/css/app.css" />
+	<link rel="stylesheet" href="static/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="static/assets/css/dark-theme.css" />
+	<style>
+		.required:after {
+            content: " *";
+            color: red;
+        }
+	</style>
+</head>
+
+<body>
+	<!-- wrapper -->
+	<div class="wrapper">		
+		{% include 'sidebar.html' %}		
+		<!--page-wrapper-->
+		<div class="page-wrapper">
+			<!--page-content-wrapper-->
+			<div class="page-content-wrapper">
+				{% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <strong>{{ message }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+				<div class="page-content">					
+					<div class="row">
+						<div class="col-xl-7 mx-auto">
+							<h6 class="mb-0 text-uppercase">Edit product</h6>
+							<hr>
+							<div class="card border-top border-0 border-4 border-primary" style="border-color:#673ab7;">
+								<div class="card-body p-5">									
+									<form class="row g-3" id="productform" method="post" action="/edit-product" enctype="multipart/form-data">
+										{% csrf_token %}
+										<div class="col-12">
+											<label for="productid" class="form-label">Product ID</label>
+											<input type="text" name="productid" class="form-control" id="productid" value="{{productid}}" style="cursor:not-allowed;pointer-events:none;" hidden>
+											<input type="text" name="productid" class="form-control" id="productid" value="{{productid}}" style="cursor:not-allowed;pointer-events:none;">
+										</div>										
+										<div class="col-md-6">
+											<label for="selectcategory" class="form-label required">Select Category</label>
+											<select id="categories" name="categories" class="form-select" required>
+												{% for cat in Category_Data%}
+													{% comment %} {% if cat.id == category%}
+														<option selected name="categoryname" value="{{cat.id}}">{{cat.categoryname}}</option>
+													{% else%} {% endcomment %}
+														<option value="{{cat.id}}" name="categoryname">{{cat.categoryname}}</option>
+													{% comment %} {%endif%} {% endcomment %}
+												{%endfor%}
+											</select>
+										</div>
+										<div class="col-md-6">
+											<label for="productname" class="form-label required">Product name</label>
+											<input type="text" name="new_productname" class="form-control" id="new_productname" value="{{productname}}" pattern="^[a-zA-Z\s]+$" autocomplete="off" required>
+										</div>
+										{% comment %} <div class="col-md-6">
+											<label for="productsize" class="form-label">Size</label>
+											<input type="text" name="new_productsize" class="form-control" id="new_productsize" value="{{productsize}}" autocomplete="off" required>
+										</div> {% endcomment %}
+										<div class="col-md-6">
+											<label for="productsize" class="form-label required">Select Size</label>
+											<select id="new_productsize" name="new_productsize" class="form-select" required>
+												<option selected hidden value="{{productsize}}">{{productsize}}</option>
+												<option value="Pieces">Pieces</option>
+												<option value="Dozen">Dozen</option>
+												<option value="Grams">Grams</option>
+												<option value="Kilograms">Kilograms</option>
+												<option value="Milliliters">Milliliters</option>
+												<option value="Liters">Liters</option>
+												<option value="Meters">Meters</option>
+												<option value="Centimeters">Centimeters</option>
+												<option value="Inches">Inches</option>
+												<option value="Feet">Feet</option>
+												<option value="Yards">Yards</option>
+												<option value="Pounds">Pounds</option>
+												<option value="Gallons">Gallons</option>
+											</select>
+										</div>
+										<div class="col-md-6">
+											<label for="productcolor" class="form-label required">Color</label>
+											<input type="text" name="new_productcolor" class="form-control" id="new_productcolor" value="{{productcolor}}" autocomplete="off" required>
+										</div>
+										<div class="col-md-6">
+											<label for="productmaterial" class="form-label required">Material</label>
+											<input type="text" name="new_productmaterial" class="form-control" id="new_productmaterial" value="{{productmaterial}}" autocomplete="off" required>
+										</div>
+										<div class="col-md-6">
+											<label for="productstock" class="form-label required">Item Stock</label>
+											<input type="text" name="new_productstock" class="form-control" id="new_productstock" value="{{productstock}}" autocomplete="off" required>
+										</div>
+										<div class="col-md-6">
+											<label for="purchaseprice" class="form-label required">Purchase Price</label>
+											<input type="text" name="new_purchaseprice" class="form-control" id="new_purchaseprice" value="{{purchaseprice}}" autocomplete="off" required>
+										</div>
+										<div class="col-md-6">
+											<label for="sellprice" class="form-label required">Sell Price</label>
+											<input type="text" name="new_sellprice" class="form-control" id="new_sellprice" value="{{sellprice}}" autocomplete="off" required>
+										</div>
+										<div class="col-12">
+											<label for="productdesc" class="form-label">Description (Optional)</label>
+											<textarea class="form-control" id="new_productdesc" name="new_productdesc" placeholder="Enter a description..." rows="3" >{{productdesc}}</textarea>
+										</div>	
+										<div class="mb-3">
+											<input type="file" class="form-control" id="productimage" name="productimage" value="" aria-label="file example" maxlength="1048576" accept=".jpeg,.jpg,.png">
+											<input type="text" class="form-control" id="old_productimage" name="old_productimage" hidden>
+										</div>		
+										<div class="mt-0 chip" id="existimage" style="margin-left: 8px;width: 950px;">
+											<label id="imagename"></label>
+											<span class="closebtn" onclick="this.parentElement.style.display='none'">×</span>
+										</div>							
+										<div class="col-12" style="text-align:center;">
+											<button type="submit" onclick="SubmitBtn()" name="submit" value="submit" class="btn btn-primary px-5">Edit Product</button>
+										</div>
+									</form>
+								</div>
+							</div>							
+						</div>
+					</div>
+					<!--end row-->									
+				</div>
+			</div>
+			<!--end page-content-wrapper-->
+		</div>
+		<!--end page-wrapper-->
+		<!--start overlay-->
+		<div class="overlay toggle-btn-mobile"></div>
+		<!--end overlay-->
+		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--End Back To Top Button-->
+		<!--footer -->
+		
+	</div>
+	<!-- end wrapper -->		   
+	<!-- JavaScript -->
+	<script>
+		// To set selected dropdown product
+		var category_id = '{{category}}';
+		var dropdown = document.getElementById("categories");
+		var options = dropdown.options;
+		for (var i = 0; i < options.length; i++) {
+			var value = options[i].value;
+			var text = options[i].textContent;
+			if(value == category_id){
+				options[i].selected = true;
+				break;
+			}
+		}
+
+		// For displaying the current productId
+		var inputElement = document.getElementById("productid");
+		window.addEventListener('DOMContentLoaded', (event) => {
+			flag = '{{flag}}';
+			if(flag == 0)
+			{
+				var productId1 = '{{newProductId}}';
+				inputElement.value = productId1+1;
+			}else{
+				var productId2 = '{{productid2}}';
+				inputElement.value = productId2+1;
+			}
+		});
+		
+		// Add the submitForm function as the submit event handler for the form
+		const fileInput = document.getElementById('productimage');
+		const maxFileSize = 1048576; // 1 MB in bytes
+		
+		fileInput.addEventListener('change', (event) => {
+			const file = event.target.files[0];
+			const productImage = document.getElementById("productimage").files[0];
+			const fileName = productImage.name;
+			const extension = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
+			if ((extension != "jpeg" && extension != "jpg" && extension != "png")) {
+				alert('Sorry, Please select a file of JPEG, JPG or PNG format only.');
+				fileInput.value = '';
+			}
+			else if(file.size > maxFileSize) {
+				alert('Sorry, Selected Image size exceeds the maximum limit of 1 MB. You can only upload image with the size of 1 MB and smaller.');
+				fileInput.value = ''; 
+			}	
+		}); 
+
+		// To get only image name from the path
+		function getFileName(path) {
+			var index = path.lastIndexOf("/");
+			if (index != -1) {
+			  return path.substr(index + 1);
+			} else {
+			  return path;
+			}
+		}
+		var fullPath = '{{productimage}}';
+		console.log("fullpath: ",fullPath);
+		var fileName = getFileName(fullPath);
+		var printname = document.getElementById("imagename");
+		var hidden_imagename = document.getElementById("old_productimage");
+		const ShowImagename = document.getElementById("existimage");
+		console.log("filename: ",fileName);
+		console.log("imagename: ",printname.value);
+		if(typeof fileName === "undefined" || fileName === "null" || fileName === ""){
+			console.log("Inside false");	
+			ShowImagename.style.display = "none";
+			//hidden_imagename.value = "none";
+		}else{
+			printname.innerHTML = fileName;
+		}
+		
+		// To set the name of image name whether it is change or not
+		if(typeof fileName !== "undefined" && fileName !== "null" && fileName !== ""){
+			const fileImage = document.getElementById("productimage");
+			hidden_imagename.value = fileName;
+			fileImage.addEventListener("change", () => {
+				if (fileImage.files.length === 0) {
+					ShowImagename.style.display = "block";
+				} else {
+					ShowImagename.style.display = "none";	
+				}
+			});
+		}
+		function SubmitBtn() {
+			const new_productname = document.getElementById("new_productname");
+			const new_productsize = document.getElementById("new_productsize");
+			const new_productcolor = document.getElementById("new_productcolor");
+			const new_productmaterial = document.getElementById("new_productmaterial");
+			const new_purchaseprice = document.getElementById("new_purchaseprice");
+			const new_sellprice = document.getElementById("new_sellprice");
+			const new_productstock = document.getElementById("new_productstock");
+			const categories = document.getElementById("categories");
+			var alpha = /^[a-zA-Z\s]+$/;
+			var alphanumeric = /^[a-zA-Z0-9]+$/;
+			var number = /^[0-9]+$/;
+		
+			var isValid = true;
+		
+			if (categories.value == "Select category") {
+				categories.setCustomValidity("Please select a category.");
+				isValid = false;
+			} else {
+				categories.setCustomValidity("");
+			}
+
+			if (new_productname.value == "") {
+				new_productname.setCustomValidity("Product name cannot be empty.");
+				isValid = false;
+			} else if (!alpha.test(new_productname.value)) {
+				new_productname.setCustomValidity("Invalid format. Please do not use special characters and numbers.");
+				isValid = false;
+			} else {
+				new_productname.setCustomValidity("");
+			}
+		
+			if (new_productsize.value == "") {
+				new_productsize.setCustomValidity("Product size cannot be empty.");
+				isValid = false;
+			} else if (!alphanumeric.test(new_productsize.value)) {
+				new_productsize.setCustomValidity("Invalid format. Please do not use special characters.");
+				isValid = false;
+			} else {
+				new_productsize.setCustomValidity("");
+			}
+		
+			if (new_productcolor.value == "") {
+				new_productcolor.setCustomValidity("Product color cannot be empty.");
+				isValid = false;
+			} else if (!alpha.test(new_productcolor.value)) {
+				new_productcolor.setCustomValidity("Invalid format. Please do not use special characters and numbers.");
+				isValid = false;
+			} else {
+				new_productcolor.setCustomValidity("");
+			}
+		
+			if (new_productmaterial.value == "") {
+				new_productmaterial.setCustomValidity("Product material cannot be empty.");
+				isValid = false;
+			} else if (!alpha.test(new_productmaterial.value)) {
+				new_productmaterial.setCustomValidity("Invalid format. Please do not use special characters and numbers.");
+				isValid = false;
+			} else {
+				new_productmaterial.setCustomValidity("");
+			}
+		
+			if (new_purchaseprice.value == "") {
+				new_purchaseprice.setCustomValidity("Product price cannot be empty.");
+				isValid = false;
+			} else if (!number.test(new_purchaseprice.value)) {
+				new_purchaseprice.setCustomValidity("Invalid format. Please enter a valid number.");
+				isValid = false;
+			} else {
+				new_purchaseprice.setCustomValidity("");
+			}
+
+			if (new_sellprice.value == "") {
+				new_sellprice.setCustomValidity("Product price cannot be empty.");
+				isValid = false;
+			} else if (!number.test(new_sellprice.value)) {
+				new_sellprice.setCustomValidity("Invalid format. Please enter a valid number.");
+				isValid = false;
+			} else {
+				new_sellprice.setCustomValidity("");
+			}
+		
+			if (new_productstock.value == "") {
+				new_productstock.setCustomValidity("Product stock cannot be empty.");
+				isValid = false;
+			} else if (!number.test(new_productstock.value)) {
+				new_productstock.setCustomValidity("Invalid format. Please enter a valid number.");
+				isValid = false;
+			} else {
+				new_productstock.setCustomValidity("");
+			}
+		}
+	</script>
+	<!-- Bootstrap JS -->
+	<script src="static/assets/js/bootstrap.bundle.min.js"></script>
+	
+	<!--plugins-->
+	<script src="static/assets/js/jquery.min.js"></script>
+	<script src="static/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="static/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="static/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+	<!-- App JS -->
+	<script src="static/assets/js/app.js"></script>
+</body>
+</html>

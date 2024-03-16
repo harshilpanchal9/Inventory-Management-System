@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-sidebar">
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>Dashboard | Administrator</title>
+	<!--favicon-->
+	<link rel="icon" href="static/assets/images/favicon-32x32.png" type="image/png" />
+	<!-- Vector CSS -->
+	<link href="static/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
+	<!--plugins-->
+	<link href="static/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	<link href="static/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+	<link href="static/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+	<!-- loader-->
+	<link href="static/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="static/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="static/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&amp;family=Roboto&amp;display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="static/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="static/assets/css/app.css" />
+	<link rel="stylesheet" href="static/assets/plugins/apexcharts-bundle/css/apexcharts.css" />
+	<link rel="stylesheet" href="static/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="static/assets/css/dark-theme.css" />
+	<style>
+		/* Hide scrollbar on desktop screens */
+			@media (min-width: 768px) {
+			.table-responsive::-webkit-scrollbar {
+				display: none;
+			}
+		}
+
+		/* Show scrollbar on mobile screens */
+			@media (max-width: 767px) {
+			.table-responsive {
+				overflow-x: auto;
+			}
+		}
+
+		#piechart {
+			display: flex;
+			align-items: center; 
+  			justify-content: center;
+			margin: auto;
+			width: 300px;
+			height: 300px;
+		}
+	</style>
+</head>
+
+<body>
+	<!-- wrapper -->
+	<div class="wrapper">
+		{% include 'sidebar.html' %} 
+		<!--header-->
+		<!--end header-->
+		<!--page-wrapper-->
+		<div class="page-wrapper">
+			<!--page-content-wrapper-->
+			<div class="page-content-wrapper">
+				<div class="page-content">
+					<div class="row">
+						<div class="col-12 col-lg-3">
+							<a href = "/view-category">
+								<div class="card radius-15 bg-voilet">
+									<div class="card-body">
+										<div class="d-flex align-items-center">
+											<div>
+												<h2 class="mb-0 text-white">{{Total_category}}</h2>
+											</div>
+											<div class="ms-auto font-35 text-white">
+												<svg xmlns="http://www.w3.org/2000/svg" style="color:white;" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-inbox"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+											</div>
+										</div>
+										<div class="d-flex align-items-center">
+											<div>
+												<p class="mb-0 text-white">Total Categories</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>
+						<div class="col-12 col-lg-3">
+							<a href = "/view-products">
+								<div class="card radius-15 bg-primary-blue">
+									<div class="card-body">
+										<div class="d-flex align-items-center">
+											<div>
+												<h2 class="mb-0 text-white">{{Total_product}}</h2>
+											</div>
+											<div class="ms-auto font-35 text-white">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-square"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+											</div>
+										</div>
+										<div class="d-flex align-items-center">
+											<div>
+												<p class="mb-0 text-white">Total Products</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>
+						<div class="col-12 col-lg-3">
+							<a href = "/purchases">
+								<div class="card radius-15 bg-rose">
+									<div class="card-body">
+										<div class="d-flex align-items-center">
+											<div>
+												<h2 class="mb-0 text-white">{{Total_purchases}}</h2>
+											</div>
+											<div class="ms-auto font-35 text-white">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+											</div>
+										</div>
+										<div class="d-flex align-items-center">
+											<div>
+												<p class="mb-0 text-white">Purchase Orders</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>
+						<div class="col-12 col-lg-3">
+							<a href="/sells">
+								<div class="card radius-15 bg-sunset">
+									<div class="card-body">
+										<div class="d-flex align-items-center">
+											<div>
+												<h2 class="mb-0 text-white">{{Total_sells}}</h2>
+											</div>
+											<div class="ms-auto font-35 text-white">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-bag"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+											</div>
+										</div>
+										<div class="d-flex align-items-center">
+											<div>
+												<p class="mb-0 text-white">Sale Orders</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</a>
+						</div>
+					</div>
+					<!--end row-->
+					<div class="row">
+                      	<div class="col-12 col-lg-6">
+							<div class="card radius-15">
+								<div class="card-body">
+									<div class="d-flex align-items-center">
+										<div>
+											<h5 style="margin-bottom: 22px">Order Details</h5>
+										</div>
+									</div>
+									<div id="piechart"></div>
+									<div class="legends" style="margin-top:33px;">
+										<div class="row">
+											<div class="col-12 col-lg-5">
+												<div class="d-flex align-items-center justify-content-between">
+													<div class="text-secondary"><i class='bx bxs-circle font-13 text-primary-blue me-2'></i>Total Purchases</div>
+													<div>{{Total_purchases}}</div>
+												</div>
+											</div>
+											<div class="col-12 col-lg-2">
+												<div class="vertical-separater" style="height:20px;"></div>
+											</div>
+											<div class="col-12 col-lg-5">
+												<div class="d-flex align-items-center justify-content-between">
+													<div class="text-secondary"><i class='bx bxs-circle font-13 text-red me-2'></i>Total Sales</div>
+													<div>{{Total_sells}}</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+					  	</div>
+					 	<div class="col-12 col-lg-6">
+							<div class="card radius-15">
+								<div class="card-body">
+									<div class="d-flex align-items-center">
+										<div>
+											<h5 class="mb-0">Recent Purchases</h5>
+										</div>
+										<div class="dropdown ms-auto">
+											<a href="/add-purchase"><button type="button" class="btn btn-primary m-1 radius-30 px-4">Add Purchase</button></a>
+										</div>
+									</div>
+									<div class="card-body p-2 mt-4 mb-2">
+										{% if not Recent_purchases%}
+											<div style="text-align:center;">
+												<img src="/media/images/others/empty-purchase-list.png" width="305" height="305" alt="">
+											</div>
+										{% else%}
+											<div class="table-responsive">
+												<div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
+													<div class="row">
+														<div class="col-sm-12">
+															<table id="example2" class="p-2 mb-0 table table-striped table-bordered dataTable" style="width: 100%;" role="grid" aria-describedby="example2_info">
+																<thead>
+																	<tr role="row">
+																		<th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 320px;">Bill No</th>
+																		<th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Start date: activate to sort column ascending" style="width: 226px;">Bill date</th>
+																		<th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 477px;">Supplier</th>
+																		<th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 239px;">Payment Type</th>
+																		<th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Age: activate to sort column ascending" style="width: 128px;">Total</th>
+																	</tr>
+																</thead>
+																<tbody>
+																	{% for purchase in Recent_purchases %}
+																	<tr role="row" class="odd">
+																		<td class="sorting_1">{{purchase.billNo}}</td>
+																		<td>{{purchase.billDate}}</td>
+																		<td>{{purchase.supplierName}}</td>
+																		<td>{{purchase.paymentType}}</td>
+																		<td>{{purchase.total}}</td>
+																	</tr>
+																	{% endfor %}
+																</tbody>
+															</table>
+														</div>
+													</div>
+												</div>
+											</div>
+										{% endif %}
+									</div>
+								</div>
+							</div>
+						</div> 
+					</div>
+				
+					<!--end row-->
+
+					<div class="row">
+						<div class="col-12 col-lg-4 d-flex">
+							<div class="card radius-15 w-100">
+								<div class="card-body">
+									<div class="d-lg-flex align-items-center">
+										<div>
+											<h5 class="mb-4">Top Selling Products</h5>
+										</div>
+									</div>
+									<div class="progress-wrapper mb-4">
+										<p class="mb-1" id="p_name5">No product available <span class="float-end" id="p_value5">0%</span>
+										</p>
+										<div class="progress radius-15" style="height:5px;">
+											<div class="progress-bar bg-wall" role="progressbar" id="p_width5" style="width:0%;"></div>
+										</div>
+									</div>
+									<div class="progress-wrapper mb-4">
+										<p class="mb-1" id="p_name1">No product available <span class="float-end" id="p_value1">0%</span>
+										</p>
+										<div class="progress radius-15" style="height:5px;">
+											<div class="progress-bar" role="progressbar" id="p_width1" style="width:0%;"></div>
+										</div>
+									</div>
+									<div class="progress-wrapper mb-4">
+										<p class="mb-1" id="p_name3">No product available <span class="float-end" id="p_value3">0%</span>
+										</p>
+										<div class="progress radius-15" style="height:5px;">
+											<div class="progress-bar bg-red-light" role="progressbar" id="p_width3" style="width:0%;"></div>
+										</div>
+									</div>
+									<div class="progress-wrapper mb-4">
+										<p class="mb-1" id="p_name6">No product available <span class="float-end" id="p_value6">0%</span>
+										</p>
+										<div class="progress radius-15" style="height:5px;">
+											<div class="progress-bar bg-dark" role="progressbar" id="p_width6" style="width:0%;"></div>
+										</div>
+									</div>
+									<div class="progress-wrapper mb-4">
+										<p class="mb-1" id="p_name2">No product available <span class="float-end" id="p_value2">0%</span>
+										</p>
+										<div class="progress radius-15" style="height:5px;">
+											<div class="progress-bar bg-voilet" role="progressbar" id="p_width2" style="width:0%;"></div>
+										</div>
+									</div>
+									<div class="progress-wrapper">
+										<p class="mb-1" id="p_name4">No product available <span class="float-end" id="p_value4">0%</span>
+										</p>
+										<div class="progress radius-15" style="height:5px;">
+											<div class="progress-bar bg-sunset" role="progressbar" id="p_width4" style="width:0%;"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-12 col-lg-8 d-flex">
+							<div class="card radius-15 w-100">
+								<div class="card-body">
+									<div class="d-flex align-items-center mb-3">
+										<div>
+											<h5 class="mb-0">Last month Forecast</h5>
+										</div>
+									</div>
+									<div class="row g-3">
+										<div class="col-12 col-lg-12">
+											<div class="card radius-15 border shadow-none mb-0">
+												<div class="card-body">
+													<div class="d-flex flex-row align-items-center">
+														<div>
+															<p class="text-secondary mb-0">Revenue</p>
+															<h4 class="mb-0 ">{{last_month_total_revenue}}</h4>
+														</div>
+														<div class="ms-auto">
+															<p class="text-secondary mb-0">Net Profit</p>
+															<h4 class="mb-0 ">{{last_month_net_profit}}</h4>
+														</div>
+													</div>
+													<div id="revenueChart" class="ms-auto mt-1"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--end row-->	
+					<div class="card radius-15 overflow-hidden">
+						<div class="card-header border-bottom-0">
+							<div class="d-flex align-items-center mt-0">
+								<div>
+									<h5 class="mb-0">Recent Sales</h5>
+								</div>
+								<div class="ms-auto">
+									<a href="/add-sell"><button type="button" class="btn btn-primary m-1 radius-30 px-4	">Add Sale</button></a>
+								</div>
+							</div>
+						</div>
+						<div class="card-body p-0 m-4 mt-0">
+							{% if not Recent_sales%}
+								<div style="text-align:center;">
+									<img src="/media/images/others/empty-sell-list.png" width="305" height="305" alt="">
+								</div>
+							{% else%}
+								<div class="table-responsive">
+									<table class="table mb-0">
+										<thead>
+											<tr>
+												<th style="text-align:left;">Bill No</th>
+												<th style="text-align:center;">Bill date</th>
+												<th style="text-align:center;">Customer</th>
+												<th style="text-align:center;">GSTIN</th>
+												<th style="text-align:center;">Payment Type</th>
+												<th style="text-align:center;">Total</th>
+												<th style="text-align:center;">Contact No</th>
+											</tr>
+										</thead>
+										<tbody>
+											{% for Recent_sales in Recent_sales%}
+												<tr>
+													<td style="text-align:left;">{{Recent_sales.billNo}}</td>
+													<td style="text-align:center;">{{Recent_sales.billDate}}</td>
+													<td style="text-align:center;">{{Recent_sales.customerName}}</td>
+													<td style="text-align:center;">{{Recent_sales.customerGst}}</td>
+													<td style="text-align:center;">{{Recent_sales.paymentType}}</td>
+													<td style="text-align:center;">{{Recent_sales.total}}</td>
+													<td style="text-align:center;">{{Recent_sales.customerPhone}}</td>
+												</tr>
+											{% endfor%}
+										</tbody>
+									</table>
+								</div>
+							{% endif%}
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--end page-content-wrapper-->
+		</div>
+		<!--end page-wrapper-->
+		<!--start overlay-->
+		<div class="overlay toggle-btn-mobile"></div>
+		<!--end overlay-->
+		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--End Back To Top Button-->
+
+	</div>	
+	<!-- JavaScript -->
+	<!-- Bootstrap JS -->
+	<script src="static/assets/js/bootstrap.bundle.min.js"></script>
+	
+	<!--plugins-->
+	<script src="static/assets/js/jquery.min.js"></script>
+	<script src="static/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="static/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	<script src="static/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+	<!-- Vector map JavaScript -->
+
+	<script src="static/assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js"></script>
+	<script src="static/assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js"></script>
+	<script src="static/assets/plugins/vectormap/jquery-jvectormap-in-mill.js"></script>
+	<script src="static/assets/plugins/vectormap/jquery-jvectormap-us-aea-en.js"></script>
+	<script src="static/assets/plugins/vectormap/jquery-jvectormap-uk-mill-en.js"></script>
+	<script src="static/assets/plugins/vectormap/jquery-jvectormap-au-mill.js"></script>
+	<script src="static/assets/plugins/apexcharts-bundle/js/apexcharts.min.js"></script>
+	{% comment %} <script src="static/assets/js/index2.js"></script> {% endcomment %}
+	<!-- App JS -->
+	<script src="static/assets/js/app.js"></script>
+	<script>
+		// For Purchase/Sale Pie-Chart
+		const Chart_id = document.getElementById("piechart");	
+		var Total_purchases = parseInt('{{Total_purchases}}');
+		var Total_sells = parseInt('{{Total_sells}}');
+
+		if(Total_purchases == 0 && Total_sells == 0){
+			Chart_id.innerHTML = "No data available";
+		}else{
+			var options = {
+				labels: ['Purchases', 'Sales'],
+				series: [Total_purchases, Total_sells],
+				chart: {
+					type: 'donut',
+					width: 240,
+					height: 250,
+					marginTop: 50,
+					marginLeft: 20,
+				},
+				colors: ['#265ed7', '#ff392b'],
+				legend: {
+					show: false,
+				},
+				dataLabels: {
+					enabled: false
+				},
+			}; 
+		}
+		var chart = new ApexCharts(document.querySelector("#piechart"),options);	
+        chart.render();
+
+		// For Sales Forecast Chart
+		var revenue_sell_data = JSON.parse('{{ revenue_sell_data|safe }}');
+		var net_profit_purchase_data = JSON.parse('{{ net_profit_purchase_data|safe }}');
+
+		// Sort revenue sell data by billDate
+		revenue_sell_data.sort(function(a, b) {
+			return new Date(a.billDate) - new Date(b.billDate);
+		});
+
+		// Sort net profit purchase data by billDate
+		net_profit_purchase_data.sort(function(a, b) {
+			return new Date(a.billDate) - new Date(b.billDate);
+		});
+
+		// For Revenue data
+		var revenue_dates = revenue_sell_data.map(function(sell) {
+			return sell.billDate;
+		});
+
+		var revenue_grossTotals = revenue_sell_data.map(function(sell) {
+			return sell.grossTotal;
+		});
+
+		// For Net profit data
+		var net_profit_dates = net_profit_purchase_data.map(function(purchase) {
+			return purchase.billDate;
+		});
+
+		var net_profit_grossTotals = net_profit_purchase_data.map(function(purchase) {
+			return purchase.grossTotal;
+		});
+
+		var all_dates = [...revenue_dates, ...net_profit_dates];
+			all_dates.sort(function(a, b) {
+				return new Date(a) - new Date(b);
+		});
+		var options = {
+			series: [{
+				name: 'Revenue',
+				data: revenue_grossTotals
+			}, {
+				name: 'Net Profit',
+				data: net_profit_grossTotals
+			}],
+			chart: {
+				height: 230,
+				type: 'area',
+			},
+			colors: ['#008ffb', '#00e396'],
+			dataLabels: {
+				enabled: false
+			},
+			stroke: {
+				curve: 'smooth'
+			},
+			xaxis: {
+				type: 'date',
+				categories: all_dates
+			},
+			tooltip: {
+				x: {
+					format: 'dd/MM/yy'
+				},
+			},
+		};
+
+		var chart = new ApexCharts(document.querySelector("#revenueChart"), options);
+		chart.render();
+
+
+		// For Top selling products
+		ratios = "{{ratios|safe}}";
+		var i=1
+		{% for key, value in ratios.items %}
+			// Use the key-value pairs from the Django dictionary in JavaScript
+			var keyName = "{{ key }}";
+			var ratioValue = "{{ value }}";
+			var valueName = parseInt(ratioValue, 10);
+			// Perform JavaScript operations with keyName and valueName
+			if (i <= 6) {
+				var p_name = document.getElementById("p_name" + i);
+				var p_value = document.getElementById("p_value" + i);
+				var p_width = document.getElementById("p_width" + i);
+				var spanElement = p_name.querySelector('span'); // Select the nested span element
+				p_name.innerHTML = keyName;
+				spanElement.innerHTML = valueName + '%'; // Set the innerHTML of the span element
+				p_name.innerHTML += " "; // Add a space between the existing content and the new span element
+				p_name.appendChild(spanElement);
+				p_width.style.width = valueName + '%'; // Add the appropriate unit of measurement
+				i += 1;
+			}			
+    	{% endfor %}  
+	</script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-sidebar">
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<title>View Category | Administrator</title>
+	<!--favicon-->
+	<link rel="icon" href="static/assets/images/favicon-32x32.png" type="image/png" />
+	<!-- Vector CSS -->
+	<link href="static/assets/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
+	<!--plugins-->
+	<link href="static/assets/plugins/notifications/css/lobibox.min.css" rel="stylesheet" />
+	<link href="static/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+	{% comment %} <link href="static/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" /> {% endcomment %}
+	<link href="static/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+	<!-- loader-->
+	<link href="static/assets/css/pace.min.css" rel="stylesheet" />
+	<script src="static/assets/js/pace.min.js"></script>
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="static/assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&amp;family=Roboto&amp;display=swap" />
+	<!-- Icons CSS -->
+	<link rel="stylesheet" href="static/assets/css/icons.css" />
+	<!-- App CSS -->
+	<link rel="stylesheet" href="static/assets/css/app.css" />
+	<link rel="stylesheet" href="static/assets/css/dark-sidebar.css" />
+	<link rel="stylesheet" href="static/assets/css/dark-theme.css" />
+
+	<!-- For search using Ajax -->
+	<script src="static/assets/js/jquery.min.js"></script>
+	<script src="static/assets/js/search-category.js"></script>
+	<style>
+		{% comment %} @media (min-width:200px, max-width: 300px) {
+			.input-group {
+			  width: 75%;
+			}
+		  }
+		@media (max-width: 767px) {
+			.ms-auto {
+				width: 100%;
+			}
+		} {% endcomment %}
+	</style>
+</head>
+
+<body>
+	<!-- wrapper -->
+	<div class="wrapper">
+		{% include 'sidebar.html' %}
+		<!--page-wrapper-->
+		<div class="page-wrapper">
+			<!--page-content-wrapper-->
+			<div class="page-content-wrapper">
+                {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        <strong>{{ message }}</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+				<div class="page-content">
+					<div class="row">
+						<div class="col-12 col-lg-12 d-flex">
+							<div class="card radius-15 w-100">
+								<div class="card-body">
+									<div class="d-lg-flex align-items-center mb-2">
+										<div>
+											<h5 class="mb-0" style="font-size:18px;">List of Category</h5>
+										</div>
+										<div class="input-group" style="width:75%;margin:auto;">
+											<input type="text" id="search-input" style="border-radius:5px;" class="form-control" autocomplete="off" placeholder="Search category">
+										</div>
+										<div class="ms-auto">
+											<h5 id="category_counter" class="mb-0" style="padding-right:5px;font-size:18px;">
+												<span>Total Categories:&nbsp;</span>
+												{{category_counter}}
+											</h5>
+										</div>
+									</div>
+									<hr/ style="margin-bottom:0px;">
+									{% comment %} All categories will print here using Ajax {% endcomment %}
+									<div class="dashboard-social-list" style="height: 690px;">
+										<ul class="list-group list-group-flush" id="search-results"></ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--end row-->
+				</div>
+			</div>
+			<!--end page-content-wrapper-->
+		</div>
+		<!--end page-wrapper-->
+	</div>
+	<a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>					
+
+	<!-- end wrapper -->
+	<!-- JavaScript -->
+	
+	<!-- Bootstrap JS -->
+	<script src="static/assets/js/bootstrap.bundle.min.js"></script>
+	<!--plugins-->
+	<script src="static/assets/js/jquery.min.js"></script>
+	<script src="static/assets/plugins/simplebar/js/simplebar.min.js"></script>
+	<script src="static/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+	{% comment %} <script src="static/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script> {% endcomment %}
+	<!-- Vector map JavaScript -->
+	<script src="static/assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js"></script>
+	<script src="static/assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js"></script>
+	<script src="static/assets/plugins/vectormap/jquery-jvectormap-in-mill.js"></script>
+	<script src="static/assets/plugins/vectormap/jquery-jvectormap-us-aea-en.js"></script>
+	<script src="static/assets/plugins/vectormap/jquery-jvectormap-uk-mill-en.js"></script>
+	<script src="static/assets/plugins/vectormap/jquery-jvectormap-au-mill.js"></script>
+	{% comment %} <script src="static/assets/plugins/apexcharts-bundle/js/apexcharts.min.js"></script> {% endcomment %}
+	{% comment %} <script src="static/assets/js/index.js"></script> {% endcomment %}
+	<!-- App JS -->
+	<script src="static/assets/js/app.js"></script>
+
+	<!-- Notification JS -->
+	<script src="static/assets/plugins/notifications/js/lobibox.min.js"></script>
+	<script src="static/assets/plugins/notifications/js/notifications.min.js"></script>
+	<script src="static/assets/plugins/notifications/js/notification-custom-script.js"></script>
+	<!--    -->
+	<script>
+		{% comment %} new PerfectScrollbar('.dashboard-social-list');
+		new PerfectScrollbar('.dashboard-top-countries'); {% endcomment %}
+		
+		// To get categoryid
+		function setCategoryId(categoryId,categoryname) {
+			document.getElementById('categoryid').value = categoryId;
+			document.getElementById('categoryname').value = categoryname;
+		}
+		
+		// To show notification for deleting the category
+		temp = '{{function_call}}';
+		categoryname = '{{categoryname}}';
+		if(temp=="call") {
+			var get_deletecategory_status = '{{delete_result}}';
+			//categoryname = '{{categoryname}}';
+			if (get_deletecategory_status == 0){			
+				Lobibox.notify('default', {
+					pauseDelayOnHover: true,
+					continueDelayOnInactiveTab: false,
+					position: 'center top',
+					size: 'mini',
+					msg: categoryname + ' category is deleted successfully.'
+				});		
+			}
+			else{
+				Lobibox.notify('default', {
+					pauseDelayOnHover: true,
+					continueDelayOnInactiveTab: false,
+					position: 'center top',
+					size: 'mini',
+					msg: categoryname + ' category is not deleted.'
+				});	
+			}
+		}
+	</script>
+</body>
+</html>

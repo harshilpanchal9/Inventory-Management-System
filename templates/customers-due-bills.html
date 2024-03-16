@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-sidebar">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Due Bills | IMS</title>
+    <!--favicon-->
+    <link rel="icon" href="assets/images/favicon-32x32.png" type="image/png" />
+    <!--plugins-->
+    <link href="static/assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+    <link href="static/assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+    <link href="static/assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" />
+    <!-- loader-->
+    <link href="static/assets/css/pace.min.css" rel="stylesheet" />
+    <script src="static/assets/js/pace.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="static/assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <!--Data Tables -->
+    <!-- fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&amp;family=Roboto&amp;display=swap" />
+    <!-- Icons CSS -->
+    <link rel="stylesheet" href="static/assets/css/icons.css" />
+    <!-- App CSS -->
+    <link rel="stylesheet" href="static/assets/css/app.css" />
+    <link rel="stylesheet" href="static/assets/css/dark-sidebar.css" />
+    <link rel="stylesheet" href="static/assets/css/dark-theme.css" />
+    <script src="/static/assets/js/datatable.js"></script>
+
+
+    <style>
+        .no-arrows::-webkit-inner-spin-button,
+        .no-arrows::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* This will hide the scrollbar in Google Chrome and Safari */
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- wrapper -->
+    <div class="wrapper">
+    {% include 'sidebar.html' %}
+    <!--page-wrapper-->
+        <div class="page-wrapper">
+            <div class="page-content-wrapper">
+                {% if messages %} {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    <strong>{{ message }}</strong>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endfor %} {% endif %}
+                <div class="page-content container-fluid">
+                    <br>
+                    <div class="m-3" style="display: flex; justify-content: space-between; align-items: center; font-family: Arial, Helvetica, sans-serif">
+                        <h4 style="color: #262647 !important;">{{customerName}}'s Due Invoices</h4>
+                    </div>
+                    <div class="card m-3 p-4 border-0 shadow-lg" style="border-radius: 1rem !important;">
+                        {% if not allDueBills %}
+                            <div style="text-align:center;">
+                                <img src="/media/images/others/empty-purchase-list.png" width="600" height="600" alt="">
+                            </div>
+                        {% else%}
+                            <div class="table-responsive">
+                                <table id="myTable" class="p-2 mb-0 table table-striped table-bordered dataTable" style="width: 100%;" role="grid" aria-describedby="example2_info">
+                                    <thead>
+                                        <tr>
+                                            <th>Bill No.</th>
+                                            <th>Bill Date</th>
+                                            <th>Customer name</th>
+                                            <th>Total amount</th>
+                                            <th>Paid amount</th>
+                                            <th>Receivable amount</th>
+                                            <th>Paid</th>
+                                            <th style="text-align: center;">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for dueBill in allDueBills %}
+                                            <tr>
+                                                <td>{{dueBill.billNo}}</td>
+                                                <td>{{dueBill.billDate}}</td>
+                                                <td>{{dueBill.customerName}}</td>
+                                                <td>{{dueBill.totalAmount}}</td>
+                                                <td>{{dueBill.paidAmount}}</td>
+                                                <td>{{dueBill.dues}}</td>
+                                                <td>
+                                                    <form method="POST" class="paidForm" action="{% url 'customers-due-bills' %}">
+                                                        {% csrf_token %}
+                                                        <input type="hidden" name="billNo" value="{{ dueBill.billNo }}">
+                                                        <input type="hidden" name="customerId" value="{{ dueBill.customerId }}">
+                                                        <label>
+                                                            <div class="form-check form-switch" style="display:flex;justify-content:center;">
+                                                                <input class="form-check-input paidCheckbox"  style="scale:1.3; pointer-events: stroke;" type="checkbox">
+                                                            </div>
+                                                        </label>
+                                                        <button type="submit" style="display: none;"></button>
+                                                    </form>
+                                                </td>
+                                                <td>
+                                                    <div class="font-22 text-primary py-1" style="text-align: center;">
+                                                        <a href="{% url 'view-sell-bill'%}?billNo={{dueBill.billNo}}" style="color: #ff8b01;">
+                                                            <button type="button"  class="btn btn-primary px-4" name="edit" data-bs-dismiss="modal">View</button>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% endif%} 
+                    </div>    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="static/assets/js/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#Action_header').css('text-align', 'center');
+            $('.Paid__row').css('text-align', 'center');
+            $('#Paid_header').css('text-align', 'center');
+            
+            $('.paidCheckbox').change(function() {
+              var form = $(this).closest('.paidForm');
+              if ($(this).is(':checked')) {
+                console.log('check')
+                //$('.paidForm button[type="submit"]').click();
+                form.submit();
+              }
+            });
+        }); 
+
+        var purchases = "{{purchases}}";
+        window.parent.document.body.style.zoom = 1; // zoom
+        let x = new RdataTB('myTable', {
+            //RenderJSON:[], // Convert Json to Table html 
+            ShowSearch: true, // show search field,
+            ShowSelect: true, // show show select,
+            ShowPaginate: true, // show paginate ,
+            SelectionNumber: [10, 20, 50, 100], //Change Option in Select
+            HideColumn: [""], // Hide column
+            ShowHighlight: false, // show Highlight if search
+            fixedTable: true, // fixed table
+            sortAnimate: false, // show animated if sorted
+            ShowTfoot: false,
+            ExcludeColumnExport: ["Name", "City"]
+        });
+        function set(productId, productname) {
+            document.getElementById('productid').value = productId;
+            document.getElementById('productname').value = productname;
+        }
+
+        // To change the style of pagination
+        pagination = document.getElementById('pgN');
+        previous = document.getElementById('x__PREV__X');
+        next = document.getElementById('x__NEXT__X');
+        pageName = document.getElementById('PF');
+        previous.innerHTML = "Previous";
+        next.innerHTML = "Next";
+
+        pagination.style.cssText = "margin-top: 20px; justify-content:center;";
+        previous.style.cssText = "cursor: pointer; border: solid black 1px; color: #673ab7; background-color: #fff; border-color: #dee2e6; border-top-left-radius: 0.25rem; border-bottom-left-radius: 0.25rem; border-top-right-radius: 0.25rem; border-bottom-right-radius: 0.25rem;";
+        pageName.style.cssText = "color: #673ab7; cursor: context-menu; margin-right: 10px; margin-left: 10px; border: solid black 1px; border-color: #dee2e6; border-top-left-radius: 0.25rem; border-bottom-left-radius: 0.25rem; border-top-right-radius: 0.25rem; border-bottom-right-radius: 0.25rem;";
+        next.style.cssText = "cursor: pointer; border: solid black 1px; color: #673ab7; background-color: #fff; border-color: #dee2e6; border-top-left-radius: 0.25rem; border-bottom-left-radius: 0.25rem; border-top-right-radius: 0.25rem; border-bottom-right-radius: 0.25rem;";
+
+        previous.addEventListener("click", function() {
+            $('#Action_header').css('text-align', 'center');
+            $('.Paid__row').css('text-align', 'center');
+            $('#Paid_header').css('text-align', 'center');
+        });
+        
+        next.addEventListener("click", function() {
+            $('#Action_header').css('text-align', 'center');
+            $('.Paid__row').css('text-align', 'center');
+            $('#Paid_header').css('text-align', 'center');
+        });
+
+        // Previous Hover effect
+        previous.addEventListener("mouseover", function() {
+            previous.style.backgroundColor = "#673ab7";
+            previous.style.color = "#ffffff";
+        });
+          
+        previous.addEventListener("mouseout", function() {
+            previous.style.backgroundColor = "#ffffff";
+            previous.style.color = "#673ab7";
+        });
+
+        // Pagename Hover effect
+        pageName.addEventListener("mouseover", function() {
+            pageName.style.backgroundColor = "#673ab7";
+            pageName.style.color = "#ffffff";
+        });
+          
+        pageName.addEventListener("mouseout", function() {
+            pageName.style.backgroundColor = "#ffffff";
+            pageName.style.color = "#673ab7";
+        });
+
+        // Next Hover effect
+        next.addEventListener("mouseover", function() {
+            next.style.backgroundColor = "#673ab7";
+            next.style.color = "#ffffff";
+        });
+          
+        next.addEventListener("mouseout", function() {
+            next.style.backgroundColor = "#ffffff";
+            next.style.color = "#673ab7";
+        });
+    </script>
+
+    <a href="javaScript:;" class="back-to-top"><i class="bx bxs-up-arrow-alt"></i></a>
+
+    <!-- Bootstrap JS -->
+    <script src="static/assets/js/bootstrap.bundle.min.js"></script>
+
+    <!--plugins-->
+    <script src="static/assets/plugins/simplebar/js/simplebar.min.js"></script>
+    <script src="static/assets/plugins/metismenu/js/metisMenu.min.js"></script>
+    <script src="static/assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+    <!-- <script src="/static/assets/js/datatable.dev.js"></script> -->
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+    <!-- App JS -->
+    <script src="static/assets/js/app.js"></script>
+    <script src="static/assets/plugins/notifications/js/lobibox.min.js"></script>
+    <script src="static/assets/plugins/notifications/js/notifications.min.js"></script>
+    <script src="static/assets/plugins/notifications/js/notification-custom-script.js"></script>
+</body>
+
+</html>
